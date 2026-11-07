@@ -5,9 +5,11 @@ async fn main() {
     let mut game = Game::default();
     
     loop {
+        let dt = macroquad::time::get_frame_time();
+
         clear_background(BLACK);
 
-        game.update();
+        game.update(dt);
         game.render();
 
         next_frame().await
@@ -15,29 +17,22 @@ async fn main() {
 }
 
 struct Game {
-    frame_count: u32,
-    title: String,
+    elapsed: f32,
 }
 
 impl Game {
-    fn update(&mut self) {
-        self.frame_count += 1;
-
-        if self.frame_count % 300 == 0 {
-            self.title.push('!');
-        }
+    fn update(&mut self, dt: f32) {
+        self.elapsed += dt;
     }
 
     fn render(&self) {
-        draw_text(&self.title, 20.0, 20.0, 20.0, WHITE);
     }
 }
 
 impl Default for Game {
     fn default() -> Self {
         Game {
-            title: "Welcome to the Wizard's Tower!".to_string(),
-            frame_count: 0,
+            elapsed: 0.0,
         }
     }
 }
